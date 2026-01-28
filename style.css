@@ -1,3 +1,7 @@
+:root {
+  --accent: #7f5cff;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -11,139 +15,127 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #0f0c29;
+  background: black;
 }
 
-/* Animated Gradient Background */
+/* Background */
 .animated-bg {
   position: fixed;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    #1a2a6c,
-    #b21f1f,
-    #fdbb2d
-  );
+  inset: 0;
+  background: linear-gradient(120deg, #1a2a6c, #b21f1f, #fdbb2d);
   background-size: 300% 300%;
-  animation: gradientMove 15s ease infinite;
-  z-index: -2;
+  animation: gradient 18s ease infinite;
+  z-index: -3;
 }
 
-@keyframes gradientMove {
+@keyframes gradient {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* Glowing Orbs */
+/* Orbs */
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(90px);
   opacity: 0.6;
-  animation: float 20s infinite alternate ease-in-out;
+  animation: float 20s ease-in-out infinite alternate;
 }
 
-.orb1 {
-  width: 300px;
-  height: 300px;
-  background: #6a5acd;
-  top: 10%;
-  left: 15%;
-}
-
-.orb2 {
-  width: 400px;
-  height: 400px;
-  background: #ff6ec4;
-  bottom: 10%;
-  right: 15%;
-  animation-delay: 3s;
-}
-
-.orb3 {
-  width: 250px;
-  height: 250px;
-  background: #00f5ff;
-  top: 50%;
-  right: 40%;
-  animation-delay: 6s;
-}
+.orb1 { width: 300px; height: 300px; background: #7f5cff; top: 10%; left: 10%; }
+.orb2 { width: 400px; height: 400px; background: #ff5fa2; bottom: 15%; right: 10%; }
+.orb3 { width: 250px; height: 250px; background: #00eaff; top: 50%; right: 35%; }
 
 @keyframes float {
-  from {
-    transform: translateY(0px) translateX(0px);
-  }
-  to {
-    transform: translateY(-80px) translateX(60px);
-  }
+  to { transform: translate(60px, -80px); }
 }
 
-/* Quote Card */
+/* Noise */
+.noise {
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=");
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Card */
 .quote-container {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 35px;
-  width: 360px;
+  width: 380px;
+  padding: 30px;
   text-align: center;
-  border-radius: 16px;
-  box-shadow:
-    0 0 25px rgba(255, 255, 255, 0.3),
-    0 0 60px rgba(100, 100, 255, 0.4);
-  backdrop-filter: blur(10px);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  box-shadow: 0 0 60px rgba(127,92,255,0.6);
+  backdrop-filter: blur(12px);
 }
 
-.quote-container:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 0 40px rgba(255, 255, 255, 0.6),
-    0 0 90px rgba(120, 120, 255, 0.7);
-}
-
-/* Text */
 #quote {
   font-size: 18px;
-  color: #222;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 #author {
-  display: block;
-  margin-bottom: 20px;
   font-size: 14px;
   color: #555;
 }
 
-/* Button */
+/* Controls */
+.controls {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
 button {
-  padding: 10px 22px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  padding: 8px 14px;
   border: none;
   border-radius: 8px;
+  background: var(--accent);
+  color: white;
   cursor: pointer;
-  font-size: 14px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(118, 75, 162, 0.8);
+.toggle {
+  font-size: 13px;
 }
 
-/* Fade Animation */
+/* Progress Ring */
+.progress-ring {
+  margin-top: 15px;
+}
+
+.progress-ring__circle {
+  fill: transparent;
+  stroke: var(--accent);
+  stroke-dasharray: 226;
+  stroke-dashoffset: 226;
+  transition: stroke-dashoffset 0.2s linear;
+}
+
+/* History */
+.history-panel {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  max-height: 200px;
+  width: 260px;
+  overflow-y: auto;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 10px;
+}
+
 .fade {
-  animation: fadeIn 0.8s ease;
+  animation: fade 0.6s ease;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
