@@ -1,82 +1,95 @@
 const quotes = [
-  { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
-  { text: "Success is not final, failure is not fatal.", author: "Winston Churchill" },
-  { text: "Do what you can, with what you have, where you are.", author: "Theodore Roosevelt" },
-  { text: "Learning never exhausts the mind.", author: "Leonardo da Vinci" },
-  { text: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
-  { text: "Discipline is the bridge between goals and accomplishment.", author: "Jim Rohn" },
-  { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
-  { text: "Dream big. Start small. Act now.", author: "Robin Sharma" },
-  { text: "Your time is limited.", author: "Steve Jobs" },
-  { text: "Great things are done by small things together.", author: "Van Gogh" },
-  { text: "First solve the problem. Then write the code.", author: "John Johnson" },
-  { text: "Knowledge pays the best interest.", author: "Benjamin Franklin" },
-  { text: "Consistency beats motivation.", author: "Unknown" },
-  { text: "The future belongs to those who prepare today.", author: "Malcolm X" },
-  { text: "Turn wounds into wisdom.", author: "Oprah Winfrey" }
+  { text: "Consistency beats motivation.", author: "Unknown", tag: "Discipline" },
+  { text: "Focus is deciding what not to do.", author: "Steve Jobs", tag: "Focus" },
+  { text: "Small actions compound.", author: "James Clear", tag: "Habits" },
+  { text: "Learning never exhausts the mind.", author: "Leonardo da Vinci", tag: "Learning" },
+  { text: "Clarity precedes mastery.", author: "Robin Sharma", tag: "Focus" },
+  { text: "Energy flows where attention goes.", author: "Tony Robbins", tag: "Mindset" }
 ];
 
-const quoteEl = document.getElementById("quote");
-const authorEl = document.getElementById("author");
-const container = document.querySelector(".quote-container");
-const historyEl = document.getElementById("history");
-const ring = document.querySelector(".progress-ring__circle");
-const shortOnly = document.getElementById("shortOnly");
+const els = {
+  quote: document.getElementById("quote"),
+  author: document.getElementById("author"),
+  reflection: document.getElementById("reflection"),
+  action: document.getElementById("action"),
+  intent: document.getElementById("intentInput"),
+  stats: document.getElementById("stats"),
+  streak: document.getElementById("streak"),
+  count: document.getElementById("charCount")
+};
 
-let history = [];
-let favorites = JSON.parse(localStorage.getItem("favs")) || [];
-let timer = 0;
+let data = JSON.parse(localStorage.getItem("iq-data")) || {
+  streak: 0,
+  lastDate: "",
+  reflections: [],
+  favorites: []
+};
+
+function today() {
+  return new Date().toDateString();
+}
+
+function updateStreak() {
+  if (data.lastDate !== today()) {
+    data.streak++;
+    data.lastDate = today();
+  }
+  els.streak.textContent = `Streak: ${data.streak} days`;
+}
 
 function randomQuote() {
-  let pool = shortOnly.checked
-    ? quotes.filter(q => q.text.length < 60)
-    : quotes;
-
+  const intent = els.intent.value.toLowerCase();
+  let pool = quotes.filter(q => q.tag.toLowerCase().includes(intent)) || quotes;
   const q = pool[Math.floor(Math.random() * pool.length)];
-
-  container.classList.remove("fade");
-  setTimeout(() => {
-    quoteEl.textContent = `"${q.text}"`;
-    authorEl.textContent = `— ${q.author}`;
-    container.classList.add("fade");
-
-    document.documentElement.style.setProperty(
-      "--accent",
-      `hsl(${Math.random() * 360}, 80%, 60%)`
-    );
-
-    history.unshift(q.text);
-    history = history.slice(0, 6);
-    renderHistory();
-  }, 150);
+  els.quote.textContent = `"${q.text}"`;
+  els.author.textContent = `— ${q.author}`;
+  document.documentElement.style.setProperty("--accent", `hsl(${Math.random()*360},70%,60%)`);
 }
 
-function renderHistory() {
-  historyEl.innerHTML = history.map(h => `<div>• ${h}</div>`).join("");
-}
+document.getElementById("new").onclick = () => {
+  randomQuote();
+};
 
-document.getElementById("new-quote").onclick = randomQuote;
+document.getElementById("daily").onclick = () => {
+  if (!localStorage.getItem("daily-quote")) {
+    localStorage.setItem("daily-quote", JSON.stringify(quotes[Math.floor(Math.random()*quotes.length)]));
+  }
+  const q = JSON.parse(localStorage.getItem("daily-quote"));
+  els.quote.textContent = `"${q.text}"`;
+  els.author.textContent = `— ${q.author}`;
+};
 
-document.getElementById("copy").onclick = () => {
-  navigator.clipboard.writeText(quoteEl.textContent);
+els.reflection.oninput = () => {
+  els.count.textContent = `${els.reflection.value.length} / 200`;
 };
 
 document.getElementById("fav").onclick = () => {
-  favorites.push(quoteEl.textContent);
-  localStorage.setItem("favs", JSON.stringify(favorites));
+  data.favorites.push({
+    quote: els.quote.textContent,
+    reflection: els.reflection.value,
+    action: els.action.value
+  });
+  save();
 };
 
-setInterval(() => {
-  timer++;
-  ring.style.strokeDashoffset = 226 - (timer / 10) * 226;
-  if (timer >= 10) {
-    timer = 0;
-    randomQuote();
-  }
-}, 1000);
+document.getElementById("export").onclick = () => {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "intentional-quotes-data.json";
+  a.click();
+};
 
-document.addEventListener("keydown", e => {
-  if (e.code === "Space") randomQuote();
-});
+function save() {
+  localStorage.setItem("iq-data", JSON.stringify(data));
+}
 
+function updateStats() {
+  els.stats.textContent =
+    `Saved quotes: ${data.favorites.length} | Reflections written: ${data.reflections.length}`;
+}
+
+updateStreak();
 randomQuote();
+updateStats();
+save();

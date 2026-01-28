@@ -3,49 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Animated Quotes Generator</title>
+  <title>Calm Quotes</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-  <!-- Animated Background -->
-  <div class="animated-bg">
-    <span class="orb orb1"></span>
-    <span class="orb orb2"></span>
-    <span class="orb orb3"></span>
-  </div>
+<div class="background">
+  <span class="orb orb1"></span>
+  <span class="orb orb2"></span>
+  <span class="orb orb3"></span>
+</div>
 
-  <!-- Noise Overlay -->
-  <div class="noise"></div>
+<div class="card fade">
+  <p id="quote"></p>
+  <span id="author"></span>
 
-  <!-- Quote Card -->
-  <div class="quote-container fade">
-    <p id="quote"></p>
-    <span id="author"></span>
+  <textarea id="reflection" placeholder="Optional: one thought..."></textarea>
 
-    <div class="controls">
-      <button id="new-quote">New Quote</button>
-      <button id="copy">Copy</button>
-      <button id="fav">❤</button>
-    </div>
+  <button id="newQuote">New Quote</button>
+</div>
 
-    <label class="toggle">
-      <input type="checkbox" id="shortOnly">
-      Short quotes only
-    </label>
-
-    <svg class="progress-ring" width="80" height="80">
-      <circle class="progress-ring__circle"
-        stroke-width="4"
-        r="36"
-        cx="40"
-        cy="40"/>
-    </svg>
-  </div>
-
-  <!-- History Panel -->
-  <div class="history-panel" id="history"></div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
