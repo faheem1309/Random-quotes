@@ -150,4 +150,3 @@ Learn
 
 Build upon it
 
-<p align="center"> <img src="https://capsule-render.vercel.app/api?type=waving&color=7F7CFF&height=120&section=footer" /> </p> <p align="center"> Built with focus, simplicity, and curiosity ✨ </p> `
